@@ -7,7 +7,7 @@
     <!-- CSRF Token -->
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
-    <title>{{ config('app.name', 'Laravel') }}</title>
+    <title>@hasSection('title')@yield('title') · @endif{{ config('app.name', 'Laravel') }}</title>
 
     <!-- Fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
@@ -30,7 +30,11 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- Left Side Of Navbar -->
                     <ul class="navbar-nav me-auto">
-
+                        @auth
+                            <li class="nav-item">
+                                <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a>
+                            </li>
+                        @endauth
                     </ul>
 
                     <!-- Right Side Of Navbar -->
@@ -39,13 +43,13 @@
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('login') }}">{{ __('Login') }}</a>
+                                    <a class="nav-link" href="{{ route('login') }}">Inloggen</a>
                                 </li>
                             @endif
 
                             @if (Route::has('register'))
                                 <li class="nav-item">
-                                    <a class="nav-link" href="{{ route('register') }}">{{ __('Register') }}</a>
+                                    <a class="nav-link" href="{{ route('register') }}">Registreren</a>
                                 </li>
                             @endif
                         @else
@@ -58,7 +62,7 @@
                                     <a class="dropdown-item" href="{{ route('logout') }}"
                                        onclick="event.preventDefault();
                                                      document.getElementById('logout-form').submit();">
-                                        {{ __('Logout') }}
+                                        Uitloggen
                                     </a>
 
                                     <form id="logout-form" action="{{ route('logout') }}" method="POST" class="d-none">
@@ -73,6 +77,24 @@
         </nav>
 
         <main class="py-4">
+            {{-- Meldingen na een actie (FO 4.3) --}}
+            @if (session('success') || session('error'))
+                <div class="container">
+                    @if (session('success'))
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            {{ session('success') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Sluiten"></button>
+                        </div>
+                    @endif
+                    @if (session('error'))
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            {{ session('error') }}
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Sluiten"></button>
+                        </div>
+                    @endif
+                </div>
+            @endif
+
             @yield('content')
         </main>
     </div>

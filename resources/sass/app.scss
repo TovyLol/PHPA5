@@ -6,3 +6,9 @@
 
 // Bootstrap
 @import 'bootstrap/scss/bootstrap';
+
+// altijd hetzelfde 
+.band-card-img {
+    height: 180px;
+    object-fit: cover;
+}
