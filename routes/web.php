@@ -10,13 +10,14 @@ Route::get('/', function () {
 
 Auth::routes();
 
-// Na inloggen/registreren stuurt laravel/ui je naar /home, dat wordt nu het dashboard
+// redirect /home to /dashboard
 Route::redirect('/home', '/dashboard')->name('home');
-
-// Alleen voor ingelogde gebruikers (TO 7.1)
+// geen gasten
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', DashboardController::class)->name('dashboard');
 
     Route::get('/bands/create', [BandController::class, 'create'])->name('bands.create');
     Route::post('/bands', [BandController::class, 'store'])->name('bands.store');
+    Route::get('/bands/{band}/edit', [BandController::class, 'edit'])->name('bands.edit');
+    Route::put('/bands/{band}', [BandController::class, 'update'])->name('bands.update');
 });

@@ -4,16 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
 
-    <!-- CSRF Token -->
+    
     <meta name="csrf-token" content="{{ csrf_token() }}">
 
     <title>@hasSection('title')@yield('title') · @endif{{ config('app.name', 'Laravel') }}</title>
 
-    <!-- Fonts -->
+    <!-- fonts -->
     <link rel="dns-prefetch" href="//fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=Nunito" rel="stylesheet">
 
-    <!-- Scripts -->
+    <!-- scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
 </head>
 <body>
@@ -28,7 +28,7 @@
                 </button>
 
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
-                    <!-- Left Side Of Navbar -->
+                    <!-- linkerkant -->
                     <ul class="navbar-nav me-auto">
                         @auth
                             <li class="nav-item">
@@ -37,9 +37,9 @@
                         @endauth
                     </ul>
 
-                    <!-- Right Side Of Navbar -->
+                    <!-- rechterkant -->
                     <ul class="navbar-nav ms-auto">
-                        <!-- Authentication Links -->
+                        <!-- links -->
                         @guest
                             @if (Route::has('login'))
                                 <li class="nav-item">
@@ -52,7 +52,7 @@
                                     <a class="nav-link" href="{{ route('register') }}">Registreren</a>
                                 </li>
                             @endif
-                        @else
+                        @else // ja nee
                             <li class="nav-item dropdown">
                                 <a id="navbarDropdown" class="nav-link dropdown-toggle" href="#" role="button" data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false" v-pre>
                                     {{ Auth::user()->name }}
@@ -77,7 +77,7 @@
         </nav>
 
         <main class="py-4">
-            {{-- Meldingen na een actie (FO 4.3) --}}
+            {{-- dismiss --}}
             @if (session('success') || session('error'))
                 <div class="container">
                     @if (session('success'))
@@ -98,5 +98,8 @@
             @yield('content')
         </main>
     </div>
+
+    {{-- specifik scripts --}}
+    @stack('scripts')
 </body>
 </html>

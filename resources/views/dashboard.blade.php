@@ -42,10 +42,13 @@
                             <p class="card-text text-muted">{{ $band->short_description ?: 'Nog geen beschrijving.' }}</p>
                         </div>
 
-                        <div class="card-footer bg-transparent small text-muted">
-                            {{ $band->users_count }} {{ $band->users_count === 1 ? 'beheerder' : 'beheerders' }}
-                            · {{ $band->videos_count }} {{ $band->videos_count === 1 ? 'video' : "video's" }}
+                        <div class="card-footer bg-transparent d-flex justify-content-between align-items-center gap-2">
+                            <span class="small text-muted">
+                                {{ $band->users_count }} {{ $band->users_count === 1 ? 'beheerder' : 'beheerders' }}
+                                · {{ $band->videos_count }} {{ $band->videos_count === 1 ? 'video' : "video's" }}
+                            </span>
                             {{-- aanpassen en verwijderen --}}
+                            <a href="{{ route('bands.edit', $band) }}" class="btn btn-sm btn-outline-primary stretched-link">Beheren</a>
                         </div>
                     </div>
                 </div>

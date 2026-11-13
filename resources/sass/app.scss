@@ -12,3 +12,16 @@
     height: 180px;
     object-fit: cover;
 }
+
+// voorbeeld foto
+.band-photo-preview {
+    width: 100%;
+    aspect-ratio: 4 / 3;
+    object-fit: cover;
+    background-color: $gray-100;
+}
+
+// altijd visable
+.band-sticky {
+    top: 1rem;
+}
