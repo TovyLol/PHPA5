@@ -158,6 +158,73 @@
             <a href="{{ route('dashboard') }}" class="btn btn-outline-secondary">Terug naar dashboard</a>
         </div>
     </form>
+
+    {{-- Video's (FO 3.3, TO 4.4). Staat buiten het bandformulier: formulieren mogen niet genest worden --}}
+    <div class="card shadow-sm mt-5" id="videos">
+        <div class="card-header d-flex justify-content-between align-items-center">
+            <span>Video's</span>
+            <span class="badge text-bg-secondary">{{ $band->videos->count() }}</span>
+        </div>
+        <div class="card-body">
+            {{-- Video toevoegen --}}
+            <form method="POST" action="{{ route('videos.store', $band) }}" class="row g-2 align-items-start mb-4">
+                @csrf
+                <div class="col-md-6">
+                    <label for="youtube_url" class="form-label">YouTube-link <span class="text-danger">*</span></label>
+                    <input id="youtube_url" type="text" name="youtube_url" maxlength="255" required
+                           inputmode="url" placeholder="https://www.youtube.com/watch?v=..."
+                           class="form-control @error('youtube_url', 'video') is-invalid @enderror"
+                           value="{{ old('youtube_url') }}">
+                    @error('youtube_url', 'video')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-md-4">
+                    <label for="video_title" class="form-label">Titel <span class="text-muted small">(optioneel)</span></label>
+                    <input id="video_title" type="text" name="title" maxlength="100"
+                           class="form-control @error('title', 'video') is-invalid @enderror"
+                           value="{{ old('title') }}">
+                    @error('title', 'video')
+                        <div class="invalid-feedback">{{ $message }}</div>
+                    @enderror
+                </div>
+                <div class="col-md-2 d-grid">
+                    <label class="form-label d-none d-md-block">&nbsp;</label>
+                    <button type="submit" class="btn btn-primary">Toevoegen</button>
+                </div>
+            </form>
+
+            {{-- Huidige video's --}}
+            @if ($band->videos->isEmpty())
+                <p class="text-muted text-center py-3 mb-0">
+                    Nog geen video's. Plak hierboven een YouTube-link om de eerste toe te voegen.
+                </p>
+            @else
+                <ul class="list-group">
+                    @foreach ($band->videos as $video)
+                        <li class="list-group-item d-flex align-items-center gap-3">
+                            <a href="{{ $video->youtube_url }}" target="_blank" rel="noopener" class="flex-shrink-0">
+                                <img src="{{ \App\Support\YouTube::thumbnail($video->youtube_id) }}"
+                                     alt="" class="rounded video-thumb" loading="lazy">
+                            </a>
+                            <div class="flex-grow-1 text-truncate">
+                                <div class="fw-semibold text-truncate">{{ $video->title ?: 'Video zonder titel' }}</div>
+                                <a href="{{ $video->youtube_url }}" target="_blank" rel="noopener" class="small text-muted text-truncate d-block">
+                                    {{ $video->youtube_url }}
+                                </a>
+                            </div>
+                            <form method="POST" action="{{ route('videos.destroy', [$band, $video]) }}"
+                                  onsubmit="return confirm('Weet je zeker dat je deze video wilt verwijderen?');">
+                                @csrf
+                                @method('DELETE')
+                                <button type="submit" class="btn btn-sm btn-outline-danger">Verwijderen</button>
+                            </form>
+                        </li>
+                    @endforeach
+                </ul>
+            @endif
+        </div>
+    </div>
 </div>
 @endsection
 

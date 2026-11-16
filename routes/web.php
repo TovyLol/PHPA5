@@ -2,13 +2,15 @@
 
 use App\Http\Controllers\BandController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-Auth::routes();
+// Inloggen, registreren en uitloggen. Geen e-mailfuncties: geen wachtwoord-reset en geen e-mailverificatie
+Auth::routes(['reset' => false, 'verify' => false]);
 
 // redirect /home to /dashboard
 Route::redirect('/home', '/dashboard')->name('home');
@@ -20,4 +22,10 @@ Route::middleware('auth')->group(function () {
     Route::post('/bands', [BandController::class, 'store'])->name('bands.store');
     Route::get('/bands/{band}/edit', [BandController::class, 'edit'])->name('bands.edit');
     Route::put('/bands/{band}', [BandController::class, 'update'])->name('bands.update');
+
+    // Video's van een band. scopeBindings(): de video moet bij die band horen, anders 404
+    Route::post('/bands/{band}/videos', [VideoController::class, 'store'])->name('videos.store');
+    Route::delete('/bands/{band}/videos/{video}', [VideoController::class, 'destroy'])
+        ->scopeBindings()
+        ->name('videos.destroy');
 });

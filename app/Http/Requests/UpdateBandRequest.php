@@ -17,7 +17,7 @@ class UpdateBandRequest extends FormRequest
             'name' => ['required', 'string', 'max:100'],
             'short_description' => ['nullable', 'string', 'max:255'],
             'biography' => ['nullable', 'string', 'max:10000'],
-            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'], +
+            'photo' => ['nullable', 'image', 'mimes:jpg,jpeg,png,webp', 'max:2048'], 
             'remove_photo' => ['nullable', 'boolean'],
             'bg_color' => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
             'text_color' => ['required', 'regex:/^#[0-9a-fA-F]{6}$/'],
