@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\BandController;
+use App\Http\Controllers\BandUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
@@ -28,4 +29,10 @@ Route::middleware('auth')->group(function () {
     Route::delete('/bands/{band}/videos/{video}', [VideoController::class, 'destroy'])
         ->scopeBindings()
         ->name('videos.destroy');
+
+    // Beheerders van een band. scopeBindings(): de gebruiker moet beheerder van die band zijn, anders 404
+    Route::post('/bands/{band}/users', [BandUserController::class, 'store'])->name('bands.users.store');
+    Route::delete('/bands/{band}/users/{user}', [BandUserController::class, 'destroy'])
+        ->scopeBindings()
+        ->name('bands.users.destroy');
 });

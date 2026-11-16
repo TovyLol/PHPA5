@@ -225,6 +225,78 @@
             @endif
         </div>
     </div>
+
+    {{-- Beheerders (FO 3.3, TO 4.1) --}}
+    @can('manageUsers', $band)
+        @php($laatsteBeheerder = $band->users->count() <= 1)
+
+        <div class="card shadow-sm mt-4" id="beheerders">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <span>Beheerders</span>
+                <span class="badge text-bg-secondary">{{ $band->users->count() }}</span>
+            </div>
+            <div class="card-body">
+                <p class="text-muted small">
+                    Beheerders kunnen alles van deze band aanpassen, ook andere beheerders toevoegen en verwijderen.
+                </p>
+
+                {{-- Beheerder toevoegen --}}
+                <form method="POST" action="{{ route('bands.users.store', $band) }}" class="row g-2 align-items-start mb-4">
+                    @csrf
+                    <div class="col-md-10">
+                        <label for="member_email" class="form-label">E-mailadres van de nieuwe beheerder</label>
+                        <input id="member_email" type="email" name="email" maxlength="255" required
+                               placeholder="naam@voorbeeld.nl" autocomplete="off"
+                               class="form-control @error('email', 'members') is-invalid @enderror"
+                               value="{{ old('email') }}" aria-describedby="member_email_help">
+                        <div id="member_email_help" class="form-text">De persoon moet al een account hebben.</div>
+                        @error('email', 'members')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="col-md-2 d-grid">
+                        <label class="form-label d-none d-md-block">&nbsp;</label>
+                        <button type="submit" class="btn btn-primary">Toevoegen</button>
+                    </div>
+                </form>
+
+                {{-- Huidige beheerders --}}
+                <ul class="list-group">
+                    @foreach ($band->users as $beheerder)
+                        @php($isIkZelf = $beheerder->is(auth()->user()))
+                        <li class="list-group-item d-flex align-items-center gap-3">
+                            <div class="flex-grow-1 text-truncate">
+                                <div class="fw-semibold">
+                                    {{ $beheerder->name }}
+                                    @if ($isIkZelf)
+                                        <span class="badge text-bg-primary ms-1">jij</span>
+                                    @endif
+                                </div>
+                                <div class="small text-muted text-truncate">{{ $beheerder->email }}</div>
+                            </div>
+
+                            @if ($laatsteBeheerder)
+                                <span class="small text-muted" title="Een band moet minimaal één beheerder hebben">Laatste beheerder</span>
+                            @else
+                                {{-- De vraag staat in data-confirm, zo kan een naam met een ' de JavaScript niet breken --}}
+                                <form method="POST" action="{{ route('bands.users.destroy', [$band, $beheerder]) }}"
+                                      data-confirm="{{ $isIkZelf
+                                          ? 'Weet je zeker dat je deze band wilt verlaten? Je kunt hem daarna niet meer beheren.'
+                                          : 'Weet je zeker dat je '.$beheerder->name.' als beheerder wilt verwijderen?' }}"
+                                      onsubmit="return confirm(this.dataset.confirm);">
+                                    @csrf
+                                    @method('DELETE')
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">
+                                        {{ $isIkZelf ? 'Band verlaten' : 'Verwijderen' }}
+                                    </button>
+                                </form>
+                            @endif
+                        </li>
+                    @endforeach
+                </ul>
+            </div>
+        </div>
+    @endcan
 </div>
 @endsection
 

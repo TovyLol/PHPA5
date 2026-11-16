@@ -35,7 +35,10 @@ class BandController extends Controller
     {
         $this->authorize('update', $band);
 
-        $band->load(['videos' => fn ($query) => $query->oldest()]);
+        $band->load([
+            'videos' => fn ($query) => $query->oldest(),
+            'users' => fn ($query) => $query->orderBy('name'),
+        ]);
 
         return view('bands.edit', compact('band'));
     }
