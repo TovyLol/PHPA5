@@ -8,9 +8,7 @@ use App\Models\Video;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Tests\TestCase;
 
-/**
- * Video's toevoegen en verwijderen (FO 3.3, TO 4.4 en 8.1).
- */
+// verwijderen of toevoegen
 class VideoTest extends TestCase
 {
     use RefreshDatabase;

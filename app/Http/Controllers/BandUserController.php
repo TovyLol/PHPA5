@@ -7,13 +7,11 @@ use App\Models\Band;
 use App\Models\User;
 use Illuminate\Http\Request;
 
-/**
- * Beheerders van een band toevoegen en verwijderen (FO 3.3, TO 4.1).
+/* beheer bands kwa users en beheerders
  */
 class BandUserController extends Controller
 {
-    /**
-     * Geeft een bestaande gebruiker toegang tot de band.
+    /* give access
      */
     public function store(StoreBandUserRequest $request, Band $band)
     {
@@ -26,15 +24,13 @@ class BandUserController extends Controller
             ->with('success', $user->name.' is nu beheerder van '.$band->name.'.');
     }
 
-    /**
-     * Trekt de toegang van een beheerder in, of laat de ingelogde gebruiker de band verlaten.
-     * Door scopeBindings() in de route is $user gegarandeerd een beheerder van deze band.
+    /* trek toegang in van gebruikers
      */
     public function destroy(Request $request, Band $band, User $user)
     {
         $this->authorize('manageUsers', $band);
 
-        // Een band zonder beheerders kan door niemand meer worden aangepast
+        // check of er nog minimaal 1 beheerder overblijft
         if ($band->users()->count() <= 1) {
             return redirect()
                 ->to(route('bands.edit', $band).'#beheerders')
@@ -43,13 +39,13 @@ class BandUserController extends Controller
 
         $band->users()->detach($user);
 
-        // Zelf vertrokken: je hebt geen toegang meer tot de beheerpagina
+        // dit moet je echt zelfweten man 
         if ($user->is($request->user())) {
             return redirect()
                 ->route('dashboard')
                 ->with('success', 'Je hebt '.$band->name.' verlaten.');
         }
-
+        // success message 
         return redirect()
             ->to(route('bands.edit', $band).'#beheerders')
             ->with('success', $user->name.' is geen beheerder meer van '.$band->name.'.');

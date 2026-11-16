@@ -7,19 +7,16 @@ use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 
 /**
- * Controleert een nieuwe YouTube-video (TO 4.4 en 7.4).
+ * valid video?
  */
 class StoreVideoRequest extends FormRequest
 {
-    /**
-     * Fouten van dit formulier komen in een eigen "error bag",
-     * zodat ze niet door elkaar lopen met het formulier voor de bandgegevens.
-     */
+    // datalaag nr3
     protected $errorBag = 'video';
 
     public function authorize(): bool
     {
-        // Alleen beheerders van deze band mogen video's toevoegen (BandPolicy)
+        // Alleen beheerders 'update' permission
         return $this->user()->can('update', $this->route('band'));
     }
 
@@ -27,7 +24,7 @@ class StoreVideoRequest extends FormRequest
     {
         return [
             'youtube_url' => [
-                'required', 'string', 'max:255',
+                'required', 'string', 'max:255', // max 255
                 function (string $attribute, mixed $value, Closure $fail) {
                     if (YouTube::id((string) $value) === null) {
                         $fail('Dit is geen geldige YouTube-link.');
@@ -45,5 +42,5 @@ class StoreVideoRequest extends FormRequest
             'youtube_url.max' => 'De link is te lang.',
             'title.max' => 'De titel mag maximaal 100 tekens lang zijn.',
         ];
-    }
+    }// 5 minuten die ik nooit weer terug krijg
 }

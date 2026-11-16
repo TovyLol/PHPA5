@@ -44,5 +44,8 @@ class DatabaseSeeder extends Seeder
         $overig->prepend($eigen)->prepend($gedeeld)->each(function (Band $band) {
             Video::factory(rand(0, 3))->for($band)->create();
         });
+
+        // echte bands en artiesten, gekoppeld aan test@example.com
+        $this->call(RealBandsSeeder::class);
     }
 }

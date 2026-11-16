@@ -5,14 +5,10 @@ namespace App\Http\Requests;
 use Closure;
 use Illuminate\Foundation\Http\FormRequest;
 
-/**
- * Controleert het toevoegen van een beheerder aan een band (FO 3.3, TO 4.1).
- */
+// controleer of de gene die toevoegd ook wel echt beheerder is
 class StoreBandUserRequest extends FormRequest
 {
-    /**
-     * Eigen "error bag", zodat fouten alleen bij het beheerdersformulier verschijnen.
-     */
+    // datalaag nr3
     protected $errorBag = 'members';
 
     public function authorize(): bool
@@ -30,9 +26,9 @@ class StoreBandUserRequest extends FormRequest
         return [
             'email' => [
                 'required', 'email', 'max:255',
-                // De persoon moet al een account hebben (er worden geen uitnodigingen gemaild)
+                // check of de user wel bestaat
                 'exists:users,email',
-                // Niet twee keer dezelfde beheerder toevoegen
+                // als het een keer niet lukt doe het dan geen 2de keer sukkel
                 function (string $attribute, mixed $value, Closure $fail) {
                     if ($this->route('band')->users()->where('email', $value)->exists()) {
                         $fail('Deze gebruiker is al beheerder van de band.');
@@ -49,5 +45,5 @@ class StoreBandUserRequest extends FormRequest
             'email.email' => 'Dit is geen geldig e-mailadres.',
             'email.exists' => 'Er is geen account met dit e-mailadres. Vraag de persoon eerst te registreren.',
         ];
-    }
+    } // 5 minuten die ik nooit weer terug krijg
 }

@@ -7,14 +7,10 @@ use App\Models\Band;
 use App\Models\Video;
 use App\Support\YouTube;
 
-/**
- * Toevoegen en verwijderen van YouTube-video's bij een band (TO 7.2).
- */
+// voeg toe of verwijder videos van een band
 class VideoController extends Controller
 {
-    /**
-     * Voegt een video toe. Het video-ID wordt uit de link gehaald voor de embed op de EPK-pagina.
-     */
+   //voeg de video echt toe
     public function store(StoreVideoRequest $request, Band $band)
     {
         $band->videos()->create([
@@ -22,15 +18,13 @@ class VideoController extends Controller
             'youtube_id' => YouTube::id($request->validated('youtube_url')),
             'title' => $request->validated('title'),
         ]);
-
+        //success
         return redirect()
             ->to(route('bands.edit', $band).'#videos')
             ->with('success', 'De video is toegevoegd.');
     }
 
-    /**
-     * Verwijdert een video. Door scopeBindings() in de route hoort de video gegarandeerd bij deze band.
-     */
+   // volgens mij maakt de naam het wel duidelijk wat er gebeurt
     public function destroy(Band $band, Video $video)
     {
         $this->authorize('update', $band);

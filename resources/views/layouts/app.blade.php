@@ -15,6 +15,9 @@
 
     <!-- scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
+
+    {{-- pagina-specifieke stijlen (bv. kleuren van een EPK) --}}
+    @stack('styles')
 </head>
 <body>
     <div id="app">
@@ -30,6 +33,9 @@
                 <div class="collapse navbar-collapse" id="navbarSupportedContent">
                     <!-- linkerkant -->
                     <ul class="navbar-nav me-auto">
+                        <li class="nav-item">
+                            <a class="nav-link {{ request()->routeIs('search') ? 'active' : '' }}" href="{{ route('search') }}">Bands zoeken</a>
+                        </li>
                         @auth
                             <li class="nav-item">
                                 <a class="nav-link {{ request()->routeIs('dashboard') ? 'active' : '' }}" href="{{ route('dashboard') }}">Dashboard</a>

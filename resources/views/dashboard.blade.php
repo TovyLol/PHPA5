@@ -48,7 +48,11 @@
                                 · {{ $band->videos_count }} {{ $band->videos_count === 1 ? 'video' : "video's" }}
                             </span>
                             {{-- aanpassen en verwijderen --}}
-                            <a href="{{ route('bands.edit', $band) }}" class="btn btn-sm btn-outline-primary stretched-link">Beheren</a>
+                            <div class="d-flex gap-2">
+                                {{-- above-stretched: blijft klikbaar boven de stretched-link --}}
+                                <a href="{{ route('epk.show', $band) }}" class="btn btn-sm btn-outline-secondary above-stretched">Bekijk EPK</a>
+                                <a href="{{ route('bands.edit', $band) }}" class="btn btn-sm btn-outline-primary stretched-link">Beheren</a>
+                            </div>
                         </div>
                     </div>
                 </div>

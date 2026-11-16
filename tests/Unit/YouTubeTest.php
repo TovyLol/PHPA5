@@ -5,10 +5,7 @@ namespace Tests\Unit;
 use App\Support\YouTube;
 use PHPUnit\Framework\Attributes\DataProvider;
 use PHPUnit\Framework\TestCase;
-
-/**
- * Het video-ID uit verschillende soorten YouTube-links halen (TO 4.4).
- */
+// krijg alle soorten youtube links
 class YouTubeTest extends TestCase
 {
     public static function geldigeLinks(): array
@@ -28,7 +25,7 @@ class YouTubeTest extends TestCase
     }
 
     public static function ongeldigeLinks(): array
-    {
+    { // telt niet sukkel
         return [
             'leeg' => [''],
             'geen link' => ['hallo'],

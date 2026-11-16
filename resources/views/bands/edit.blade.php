@@ -17,7 +17,10 @@
         </ol>
     </nav>
 
-    <h1 class="h3 mb-4">{{ $band->name }} beheren</h1>
+    <div class="d-flex flex-wrap justify-content-between align-items-center gap-2 mb-4">
+        <h1 class="h3 mb-0">{{ $band->name }} beheren</h1>
+        <a href="{{ route('epk.show', $band) }}" class="btn btn-outline-secondary" target="_blank" rel="noopener">Bekijk EPK ↗</a>
+    </div>
 
     @if ($errors->any())
         <div class="alert alert-danger" role="alert">
@@ -59,7 +62,7 @@
                     </div>
                 </div>
 
-                {{-- Biografie --}}
+                
                 <div class="card shadow-sm mb-4">
                     <div class="card-header">Biografie</div>
                     <div class="card-body">
@@ -112,7 +115,7 @@
                 </div>
             </div>
 
-            {{-- Rechterkolom: vormgeving met live voorbeeld (TO 4.2) --}}
+            
             <div class="col-lg-5">
                 <div class="card shadow-sm sticky-lg-top band-sticky">
                     <div class="card-header">Vormgeving EPK-pagina</div>
@@ -309,7 +312,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const warning = document.getElementById('contrast-warning');
     const ratioEl = document.getElementById('contrast-ratio');
 
-    // Relatieve helderheid volgens WCAG 2.x
+    // relatieve hex kleur
     const luminance = (hex) => {
         const [r, g, b] = [1, 3, 5].map((i) => {
             const c = parseInt(hex.substr(i, 2), 16) / 255;
@@ -336,13 +339,13 @@ document.addEventListener('DOMContentLoaded', () => {
     text.addEventListener('input', update);
     update();
 
-    // Bandnaam in het voorbeeld meteen bijwerken
+    // live voorbeeld van de naam
     const name = document.getElementById('name');
     name.addEventListener('input', () => {
         document.getElementById('preview-name').textContent = name.value || 'Bandnaam';
     });
 
-    // Voorbeeld tonen van een nieuw gekozen foto
+    // voorbeeld laten zien
     const photo = document.getElementById('photo');
     photo.addEventListener('change', () => {
         const file = photo.files[0];
