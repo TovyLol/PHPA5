@@ -22,7 +22,7 @@ class UpdateProfileRequest extends FormRequest
     {
         return [
             'name' => ['required', 'string', 'max:255'],
-            // uniek, maar je eigen huidige adres mag natuurlijk blijven
+            // uniek anders grr
             'email' => ['required', 'email', 'max:255', Rule::unique('users')->ignore($this->user()->id)],
         ];
     }

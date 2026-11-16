@@ -1,39 +1,29 @@
 @extends('layouts.app')
 
+@section('title', 'Wachtwoord bevestigen')
+
 @section('content')
 <div class="container">
     <div class="row justify-content-center">
-        <div class="col-md-8">
-            <div class="card">
-                <div class="card-header">{{ __('Confirm Password') }}</div>
+        <div class="col-md-6 col-lg-5">
+            <div class="card shadow-sm">
+                <div class="card-body p-4">
+                    <h1 class="h4 mb-1">Wachtwoord bevestigen</h1>
+                    <p class="text-muted mb-4">Bevestig je wachtwoord voordat je verdergaat.</p>
 
-                <div class="card-body">
-                    {{ __('Please confirm your password before continuing.') }}
-
-                    <form method="POST" action="{{ route('password.confirm') }}">
+                    <form method="POST" action="{{ route('password.confirm') }}" novalidate>
                         @csrf
 
-                        <div class="row mb-3">
-                            <label for="password" class="col-md-4 col-form-label text-md-end">{{ __('Password') }}</label>
-
-                            <div class="col-md-6">
-                                <input id="password" type="password" class="form-control @error('password') is-invalid @enderror" name="password" required autocomplete="current-password">
-
-                                @error('password')
-                                    <span class="invalid-feedback" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+                        <div class="mb-4">
+                            <label for="password" class="form-label">Wachtwoord</label>
+                            <input id="password" type="password" class="form-control @error('password') is-invalid @enderror"
+                                   name="password" required autocomplete="current-password" autofocus>
+                            @error('password')
+                                <div class="invalid-feedback" role="alert">{{ $message }}</div>
+                            @enderror
                         </div>
 
-                        <div class="row mb-0">
-                            <div class="col-md-8 offset-md-4">
-                                <button type="submit" class="btn btn-primary">
-                                    {{ __('Confirm Password') }}
-                                </button>
-                            </div>
-                        </div>
+                        <button type="submit" class="btn btn-primary w-100">Bevestigen</button>
                     </form>
                 </div>
             </div>
