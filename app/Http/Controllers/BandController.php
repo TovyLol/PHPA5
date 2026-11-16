@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\DestroyBandRequest;
 use App\Http\Requests\StoreBandRequest;
 use App\Http\Requests\UpdateBandRequest;
 use App\Models\Band;
@@ -62,6 +63,16 @@ class BandController extends Controller
         return redirect()
             ->route('bands.edit', $band)
             ->with('success', 'De wijzigingen zijn opgeslagen.');
+    }
+    // naam zegt alles al
+    public function destroy(DestroyBandRequest $request, Band $band)
+    {
+        $this->deletePhoto($band);
+        $band->delete();
+
+        return redirect()
+            ->route('dashboard')
+            ->with('success', 'De band "'.$band->name.'" is verwijderd.');
     }
 
     //verwijder foto uit server

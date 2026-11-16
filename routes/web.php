@@ -4,6 +4,7 @@ use App\Http\Controllers\BandController;
 use App\Http\Controllers\BandUserController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EpkController;
+use App\Http\Controllers\ProfileController;
 use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
@@ -25,6 +26,12 @@ Route::middleware('auth')->group(function () {
     Route::post('/bands', [BandController::class, 'store'])->name('bands.store');
     Route::get('/bands/{band}/edit', [BandController::class, 'edit'])->name('bands.edit');
     Route::put('/bands/{band}', [BandController::class, 'update'])->name('bands.update');
+    Route::delete('/bands/{band}', [BandController::class, 'destroy'])->name('bands.destroy');
+
+    // eigen profiel
+    Route::get('/profiel', [ProfileController::class, 'edit'])->name('profile.edit');
+    Route::put('/profiel', [ProfileController::class, 'update'])->name('profile.update');
+    Route::put('/profiel/wachtwoord', [ProfileController::class, 'updatePassword'])->name('profile.password');
 
     // Video's van een band. scopeBindings(): de video moet bij die band horen, anders 404
     Route::post('/bands/{band}/videos', [VideoController::class, 'store'])->name('videos.store');

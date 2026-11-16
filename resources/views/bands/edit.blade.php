@@ -300,6 +300,53 @@
             </div>
         </div>
     @endcan
+
+    {{-- Band verwijderen (FO 3.3 en 4.3): pas na bevestiging met de bandnaam --}}
+    @can('delete', $band)
+        <div class="card border-danger shadow-sm mt-4" id="verwijderen">
+            <div class="card-header text-danger">Gevarenzone</div>
+            <div class="card-body d-flex flex-wrap justify-content-between align-items-center gap-3">
+                <div>
+                    <h2 class="h6 mb-1">Band verwijderen</h2>
+                    <p class="text-muted small mb-0">
+                        De EPK-pagina, foto en alle video's worden definitief verwijderd. Dit kan niet ongedaan worden gemaakt.
+                    </p>
+                </div>
+                <button type="button" class="btn btn-outline-danger" data-bs-toggle="modal" data-bs-target="#verwijder-modal">
+                    Band verwijderen
+                </button>
+            </div>
+        </div>
+
+        <div class="modal fade" id="verwijder-modal" tabindex="-1" aria-labelledby="verwijder-titel" aria-hidden="true">
+            <div class="modal-dialog modal-dialog-centered">
+                <form method="POST" action="{{ route('bands.destroy', $band) }}" class="modal-content" novalidate>
+                    @csrf
+                    @method('DELETE')
+                    <div class="modal-header">
+                        <h2 class="modal-title h5" id="verwijder-titel">{{ $band->name }} verwijderen?</h2>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Sluiten"></button>
+                    </div>
+                    <div class="modal-body">
+                        <p>Dit verwijdert de band voor <strong>alle</strong> beheerders. Dit kan niet ongedaan worden gemaakt.</p>
+                        <label for="confirm_name" class="form-label">
+                            Typ <strong>{{ $band->name }}</strong> om te bevestigen
+                        </label>
+                        <input type="text" id="confirm_name" name="confirm_name" autocomplete="off"
+                               class="form-control @error('confirm_name', 'verwijderen') is-invalid @enderror"
+                               data-band-name="{{ $band->name }}">
+                        @error('confirm_name', 'verwijderen')
+                            <div class="invalid-feedback">{{ $message }}</div>
+                        @enderror
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Annuleren</button>
+                        <button type="submit" class="btn btn-danger" id="verwijder-knop" disabled>Definitief verwijderen</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    @endcan
 </div>
 @endsection
 
@@ -355,6 +402,20 @@ document.addEventListener('DOMContentLoaded', () => {
         img.classList.remove('d-none');
         document.getElementById('photo-placeholder').classList.add('d-none');
     });
+
+    // verwijderknop pas aan als de bandnaam precies is overgetypt (server controleert het ook)
+    const confirmName = document.getElementById('confirm_name');
+    if (confirmName) {
+        const knop = document.getElementById('verwijder-knop');
+        const check = () => { knop.disabled = confirmName.value !== confirmName.dataset.bandName; };
+        confirmName.addEventListener('input', check);
+        check();
+
+        // na een foute bevestiging de modal direct weer openen met de foutmelding
+        @if ($errors->verwijderen->any())
+            bootstrap.Modal.getOrCreateInstance(document.getElementById('verwijder-modal')).show();
+        @endif
+    }
 });
 </script>
 @endpush

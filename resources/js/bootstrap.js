@@ -1,4 +1,7 @@
-import 'bootstrap';
+import * as bootstrap from 'bootstrap';
+
+// globaal beschikbaar, zodat Blade-scripts bv. een modal kunnen openen
+window.bootstrap = bootstrap;
 
 /**
  * We'll load the axios HTTP library which allows us to easily issue requests
