@@ -9,11 +9,11 @@ use App\Http\Controllers\SearchController;
 use App\Http\Controllers\VideoController;
 use Illuminate\Support\Facades\Route;
 
-// Openbaar: zoeken en EPK-pagina's (ook voor gasten)
+
 Route::get('/', SearchController::class)->name('search');
 Route::get('/epk/{band:slug}', [EpkController::class, 'show'])->name('epk.show');
 
-// Inloggen, registreren en uitloggen. Geen e-mailfuncties: geen wachtwoord-reset en geen e-mailverificatie
+// Inloggen, registreren en uitloggen. 
 Auth::routes(['reset' => false, 'verify' => false]);
 
 // redirect /home to /dashboard
